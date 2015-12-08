@@ -88,9 +88,15 @@ input[type=submit], input[type=reset] {
  box-shadow:1px 1px 1px #D83F3D;
  cursor:pointer;
  }
+<<<<<<< HEAD
  select{
     display: inline-block;
     width: 157px;
     height: 25px;
     color: #555555;
     }
+=======
+ td {color: white;
+      width: 50%;}
+ table{width: 100%;}
+>>>>>>> 88364262ef2ede79e95d8bdc7501aa74053c2042
