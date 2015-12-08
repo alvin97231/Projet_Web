@@ -4,8 +4,8 @@
 ?>
 
 						<section>
-                <div>
-                    <p>TEST</p>
+                <div class="center">
+                    <img src="images/main.jpg" alt="image principale"/>
                 </div>
             </section>
 
