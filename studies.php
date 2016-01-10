@@ -1,28 +1,22 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>F4U | application de gestion des fournitures</title>
-<link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
-<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-</head>
-<body>
+<?php
+    $AppelInclude = './include/';
+    require($AppelInclude . "debut.inc.html");
+    require($AppelInclude . "fonction.inc");
+
+    $bdd = connexionDB();
+    affectTypeUtilisateur($bdd);
+    verifConnecte();
+?>
 
   <div id="header">
   	<div class="header_content">
 
-  	<div class="logo"><a href="P_index.html">F4U</a> <span>| application de gestion des fournitures</span></div>
+  	<div class="logo"><a href="index.php">F4U</a> <span>| application de gestion des fournitures</span></div>
 
-    <div class="menu">
-      <ul>
-          <li><a href="P_main.html">Home</a></li>
-          <li class="selected"><a href="P_studies.html">Enseignements</a></li>
-          <li><a href="P_supplies.html">Fournitures</a></li>
-          <li><a href="P_lists.html">Listes</a></li>
-          <li><a href="P_index.html"><input value="Log Out" class="form-control" type="button"/></a></li>
-      </ul>
-     </div>
+    <?php
+      require($AppelInclude . "menu.inc.php");
+    ?>
+
     </div>
   </div><!-- End of Header-->
 
@@ -59,7 +53,7 @@
 
     <div class="section_one_three sidebar">
 
-        <h2 class="centered_title">Mes enseignement</h2>
+        <h2 class="centered_title">Mes enseignements</h2>
         <div class="roundimg"><a href="#" title=""><img src="images/icon_clients.png" alt="" title="" /></a></div>
         <p class="centered_text">
         </p>
@@ -90,25 +84,6 @@
 
 </div>
 
-
-<div class="footer">
-  <div class="footer_content">
-    <div class="footer_left">
-        <p>Copyright © FournitureForYou. All rights reserved.</p>
-    </div>
-
-    <div class="footer_right">
-        <ul class="social_icons">
-        <li><a href="#"><img src="images/icon_rss.png" alt="" title="" /></a></li>
-        <li><a href="#"><img src="images/icon_facebook.png" alt="" title="" /></a></li>
-        <li><a href="#"><img src="images/icon_twitter.png" alt="" title="" /></a></li>
-        <li><a href="#"><img src="images/icon_dribbble.png" alt="" title="" /></a></li>
-        </ul>
-    </div>
-   <div class="clear"></div>
-   </div>
-</div>
-
-
-</body>
-</html>
+<?php
+    require($AppelInclude . "footer.inc.html");
+?>
