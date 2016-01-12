@@ -26,7 +26,7 @@
 
 
      <div class="section_one_three">
-       <h2 class="centered_title">Mes enseignement</h2>
+       <h2 class="centered_title">Mes enseignements</h2>
        <div class="roundimg"><a href="studies.php" title=""><img src="images/icon_clients.png" alt="" title="" /></a></div>
        <p class="centered_text">
        </p>
