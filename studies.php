@@ -30,22 +30,13 @@
      <table>
        <thead>
          <tr>
-           <th>Identifiant</th>
            <th>Discipline</th>
            <th>Niveau</th>
          </tr>
        </thead>
        <tbody>
-         <tr onclick="document.location='#oModal'"><td class="user-name">1</td><td class="user-email">Français</td><td class="user-phone">Terminale</td></a></tr>
-         <tr><td class="user-name">2</td><td class="user-email">Philosophie</td><td class="user-phone">Premiere</td></tr>
-         <tr><td class="user-name">3</td><td class="user-email">Philosophie</td><td class="user-phone">Seconde</td></tr>
-         <tr><td class="user-name">4</td><td class="user-email">Philosophie</td><td class="user-phone">Terminale</td></tr>
-         <tr><td class="user-name">5</td><td class="user-email">Histoire</td><td class="user-phone">Seconde</td></tr>
-         <tr><td class="user-name">6</td><td class="user-email">Histoire</td><td class="user-phone">Terminale</td></tr>
-         <tr><td class="user-name">7</td><td class="user-email">Histoire</td><td class="user-phone">Premiere</td></tr>
-         <tr><td class="user-name">8</td><td class="user-email">Géographie</td><td class="user-phone">Terminale</td></tr>
-         <tr><td class="user-name">9</td><td class="user-email">Géographie</td><td class="user-phone">Seconde</td></tr>
-         <tr><td class="user-name">10</td><td class="user-email">Géographie</td><td class="user-phone">Premiere</td></tr>
+         <?php
+         ?>
        </tbody>
      </table>
 
@@ -65,16 +56,33 @@
       <div>
         <header>
           <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
-           <h2>Ajouter une fourniture</h2>
+           <h2>Ajouter un enseignement</h2>
          </header>
-         <section>
-           <input name="uname" class="form-control" type="text" placeholder=" Matière"/></br>
-           <input name="uname" class="form-control" type="text" placeholder=" Niveau "/></br>
+         <form action="include/studiesAdd.php" method="post">
+           <section>
+              <select name="matiere" class="form-control">
+                <option value="francais">Français</option>
+                <option value="mathematiques">Mathématiques</option>
+                <option value="histoire">Histoire</option>
+                <option value="geographie">Géographie</option>
+                <option value="ecjs">ECJS</option>
+                <option value="eps">EPS</option>
+                <option value="anglais">Anglais</option>
+                <option value="espagnol">Espagnol</option>
+                <option value="physique">Physique</option>
+                <option value="chimie">Chimie</option>
+            </select>
+            <select name="niveau" class="form-control">
+              <option value="Seconde">Seconde</option>
+              <option value="Premiere">Première</option>
+              <option value="Terminale">Terminale</option>
+            </select></br>
          <section>
          <footer class="cf">
-          <a href="#fermer" class="btn droite" title="Ajouter la fourniture"><input value="Ajouter" class="form-control" type="button"/></a>
+          <input value="Ajouter" name="classe" class="form-control" type="submit"/>
           <a href="#fermer" class="btn droite" title="Fermer la fenêtre"><input value="Fermer" class="form-control" type="button"/></a>
          </footer>
+        </form>
       </div>
     </div>
 
