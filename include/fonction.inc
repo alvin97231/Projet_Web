@@ -87,6 +87,7 @@ function affectTypeUtilisateur($bdd)
 	$requete = $bdd->prepare($req);
 	$resultat = $requete->execute();
 	$row = $requete->fetch();
+
 	$_SESSION['type'] = 0;
 
 	if ( isset($row) ){
@@ -113,11 +114,11 @@ function affectTypeUtilisateur($bdd)
 }
 
 /**
- * Fournit la liste des enfants et les informations les concernant dans un tableau
- * @param $bdd objet PDO
+ * Fournit la liste des enseignements dans un tableau
+ * @param $bdd objet msqli
  * @return Array
 */
-function studiesList($bdd)
+function studiesAdminList($bdd)
 {
 
 	$req = "SELECT id_Classe, Niveau FROM classe";
@@ -147,8 +148,43 @@ function studiesList($bdd)
 }
 
 /**
+ * Fournit la liste des enseignements dans un tableau
+ * @param $bdd objet msqli
+ * @return Array
+*/
+function studiesTeacherList($bdd)
+{
+
+	$req = "SELECT id_Classe, Niveau FROM classe";
+
+
+	$requete = $bdd->prepare($req);
+	$requete->execute();
+	$result = $requete -> get_result();
+
+	while ($val = $result -> fetch_assoc())
+
+		{
+
+				$id = $val['id_Classe'];
+				$niveau = $val['Niveau'];
+
+				echo "<tr>";
+
+				echo "<td>$id</td>";
+				echo "<td>$niveau</td>";
+
+				echo "</tr>\n";
+
+		}
+
+	$result -> free();
+	//$bdd -> close();
+}
+
+/**
  * Fournit la liste des enfants et les informations les concernant dans un tableau
- * @param $bdd objet PDO
+ * @param $bdd
  * @return Array
 */
 function usersList($bdd)
@@ -183,131 +219,6 @@ function usersList($bdd)
 		$result -> free();
 		$bdd -> close();
 }
-
-function listeManifestation(PDO $bdd, $domaine)
-{
-
-	$req = "SELECT * FROM manifestation";
-
-	$requete = $bdd->prepare($req);
-	$requete->execute();
-	$i=0;
-
-	while ($val = $requete -> fetch(PDO::FETCH_ASSOC))
-
-		{
-			$id = $val['idM'];
-			$date = $val['dateM'];
-			$nom = $val['libM'];
-			$date = convertirDateAnglaisVersFrancais($date);
-
-			echo "<tr>";
-			echo "<td width=\"35%\" bgcolor=\"#F8F8FF\" align=center>$nom</td>";
-			echo "<td width=\"35%\"bgcolor=\"#F8F8FF\" align=center>$date</td>";
-
-			echo "<td bgcolor=\"#F8F8FF\" align=center><a href=\"modif.php?id=$id\"><img src=\"images/Modifier.png\" alt=\"Supprimer la manifestation\" id=\"icone_action\" /></a></td>";
-			echo "<td bgcolor=\"#F8F8FF\" align=center><a href=\"gestion_participants.php?id=$id\"><img src=\"images/Ajouter.png\" title=\"Ajouter des participants\" id=\"icone_action\" /></a></td>";
-			echo "<td bgcolor=\"#F8F8FF\" align=center><a href=\"include/suppr.php?id=$id\" onclick=\"return confirm('Voulez-vous vraiment suprimer cette manifestation ?');\"><img src=\"images/Supprimer.png\" title=\"Supprimer la manifestation\" id=\"icone_action\" /></a></td>";
-
-			echo "</tr>\n";
-
-			$i++;
-		}
-
-
-	$requete -> closeCursor();
-	$bdd= NULL;
-}
-
-function listeParticipantsP(PDO $bdd)
-{
-
-	$req = "SELECT IdP, NomP, PrenomP FROM parent";
-	$requete = $bdd->prepare($req);
-	$requete->execute();
-
-	$i=0;
-
-		while ($val = $requete -> fetch(PDO::FETCH_ASSOC))
-
-		{
-				$nom = $val['NomP'];
-				$prenom = $val['PrenomP'];
-
-				echo "<tr>";
-				echo "<td width=\"42%\" bgcolor=\"#F8F8FF\" align=center>$nom</td>";
-				echo "<td width=\"42%\" bgcolor=\"#F8F8FF\" align=center>$prenom</td>";
-
-				echo "<td width=\"16%\"bgcolor=\"#F8F8FF\" align=center><input type='checkbox' name='participe[]' value='1'/></td>";
-
-				echo "</tr>\n";
-
-				$i++;
-		}
-
-		$requete -> closeCursor();
-		$bdd= NULL;
-}
-
-function listeParticipantsE(PDO $bdd)
-{
-
-	$req = "SELECT idE, NomE, PrenomE FROM enfant";
-	$requete = $bdd->prepare($req);
-	$requete->execute();
-
-	$i=0;
-
-		while ($val = $requete -> fetch(PDO::FETCH_ASSOC))
-
-		{
-				$nom = $val['NomE'];
-				$prenom = $val['PrenomE'];
-
-				echo "<tr>";
-				echo "<td width=\"42%\" bgcolor=\"#F8F8FF\" align=center>$nom</td>";
-				echo "<td width=\"42%\" bgcolor=\"#F8F8FF\" align=center>$prenom</td>";
-
-				echo "<td width=\"16%\" bgcolor=\"#F8F8FF\" align=center><input type='checkbox' name='participe[$nom]' value='$prenom'/></td>";
-
-				echo "</tr>\n";
-
-				$i++;
-		}
-
-		$requete -> closeCursor();
-		$bdd= NULL;
-}
-
-
-function VerifAbsence (PDO $bdd)
-{
-	try
-	{
-		foreach($_POST['choix'] AS $key => $value)
-		{
-			if ($value == 'A')
-			{
-				connexionDB();
-
-				$req = "INSERT INTO ABSENCE VALUES ('', CURDATE(), $key)";
-
-				$requete = $bdd->prepare($req);
-				$requete->execute();
-			}
-		}
-	}
-
-	catch(Exception $e)
-	{
-		die('Erreur : '.$e->getMessage());
-	}
-
-	echo "<script> window.location='../modules.php';</script>";
-
-
-}
-
 
 /**
  * Transforme une date au format français jj/mm/aaaa vers le format anglais aaaa-mm-jj
