@@ -86,7 +86,6 @@ function affectTypeUtilisateur($bdd)
 
 	$requete = $bdd->prepare($req);
 	$resultat = $requete->execute();
-	echo($resultat);
 	$row = $requete->fetch();
 
 	$_SESSION['type'] = 0;
@@ -97,7 +96,6 @@ function affectTypeUtilisateur($bdd)
 	else if ($row == null) {
 		$requete = $bdd->prepare($req2);
 		$resultat = $requete->execute();
-		echo($resultat);
 		$row = $requete->fetch();
 
 		if ( isset($row) ){
@@ -106,7 +104,6 @@ function affectTypeUtilisateur($bdd)
 		else if ($row == null) {
 			$requete = $bdd->prepare($req3);
 			$resultat = $requete->execute();
-			echo($resultat);
 			$row = $requete->fetch();
 
 			if ( isset($row) ){

@@ -31,7 +31,7 @@
        <p class="centered_text">
        </p>
        <a href="studies.php" class="more">Aller!</a>
-       </div>
+     </div>
 
      <div class="section_one_three">
        <h2 class="centered_title">Mes fournitures</h2>
@@ -39,7 +39,7 @@
        <p class="centered_text">
        </p>
        <a href="supplies.php" class="more">Aller!</a>
-       </div>
+     </div>
 
      <div class="section_one_three">
        <h2 class="centered_title">Mes listes complétées</h2>
@@ -47,7 +47,7 @@
        <p class="centered_text">
        </p>
        <a href="#" class="more">Aller!</a>
-       </div>
+     </div>
 
   </div>
 

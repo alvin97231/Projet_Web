@@ -73,9 +73,9 @@
                 <option value="chimie">Chimie</option>
             </select>
             <select name="niveau" class="form-control">
-              <option value="Seconde">Seconde</option>
-              <option value="Premiere">Première</option>
-              <option value="Terminale">Terminale</option>
+              <option value="1">Seconde</option>
+              <option value="2">Première</option>
+              <option value="3">Terminale</option>
             </select></br>
          <section>
          <footer class="cf">

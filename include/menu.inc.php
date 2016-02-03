@@ -28,7 +28,7 @@
     case 3:
         echo "<div class=\"menu\">";
           echo "<ul>";
-            echo "<li><a href=\"main.php\">Accueil</a></li>";
+            echo "<li><a href=\"main_panel.php\">Accueil</a></li>";
             echo "<li><a href=\"supplies.php\">Fournitures</a></li>";
             echo "<li><a href=\"lists.php\">Listes</a></li>";
             echo "<li><a href=\"studies.php\">Matieres</a></li>";
