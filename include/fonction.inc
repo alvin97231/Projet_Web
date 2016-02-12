@@ -85,9 +85,10 @@ function affectTypeUtilisateur($bdd)
 		  										FROM administrateur)";
 
 	$requete = $bdd->prepare($req);
-	$requete->execute();
-	$result = $requete -> get_result();
-	$row = $result  -> fetch_array();
+
+	$resultat = $requete->execute();
+	echo($resultat);
+	$row = $requete->fetch();
 	$_SESSION['type'] = 0;
 
 	if ( isset($row) ){
@@ -97,8 +98,8 @@ function affectTypeUtilisateur($bdd)
 	else if ($row == null) {
 		$requete = $bdd->prepare($req2);
 		$resultat = $requete->execute();
-		$result = $requete -> get_result();
-		$row = $result  -> fetch_array();
+		echo($resultat);
+		$row = $requete->fetch();
 
 		if ( isset($row) ){
 			$_SESSION['type'] = 2;
@@ -107,8 +108,8 @@ function affectTypeUtilisateur($bdd)
 		else if ($row == null) {
 			$requete = $bdd->prepare($req3);
 			$resultat = $requete->execute();
-			$requete -> get_result();
-			$row = $result -> fetch_array();
+			echo($resultat);
+			$row = $requete->fetch();
 
 			if ( isset($row) ){
 				$_SESSION['type'] = 3;

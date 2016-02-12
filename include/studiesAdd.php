@@ -19,6 +19,7 @@ elseif (!empty($_POST['matiere']) && !empty($_POST['niveau']))
 		$niveau = $_POST['niveau'];
 
 		$bdd = connexionDB();
+
 		$query= "SELECT id_Personne FROM personne  WHERE login = '".$login."'";
 		$req = $bdd->prepare($query);
 		$req->execute();
@@ -33,5 +34,7 @@ elseif (!empty($_POST['matiere']) && !empty($_POST['niveau']))
 		$query2 = "INSERT INTO est_prof VALUES($niveau, $id_Prof)";
 		$req2 = $bdd->prepare($query2);
 		$req2->execute();
+
+		echo "<script> window.location='../panel.php';</script>";
 	}
 ?>

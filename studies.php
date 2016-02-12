@@ -36,7 +36,10 @@
        </thead>
        <tbody>
          <?php
+<<<<<<< HEAD
           studiesTeacherList($bdd)
+=======
+>>>>>>> a4d404596d9c7bda7e574c62111df9f97af08b82
          ?>
        </tbody>
      </table>
@@ -74,9 +77,15 @@
                 <option value="chimie">Chimie</option>
             </select>
             <select name="niveau" class="form-control">
+<<<<<<< HEAD
               <option value="1">Seconde</option>
               <option value="2">Première</option>
               <option value="3">Terminale</option>
+=======
+              <option value="Seconde">Seconde</option>
+              <option value="Premiere">Première</option>
+              <option value="Terminale">Terminale</option>
+>>>>>>> a4d404596d9c7bda7e574c62111df9f97af08b82
             </select></br>
          <section>
          <footer class="cf">
