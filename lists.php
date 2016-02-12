@@ -58,16 +58,6 @@
 
     </div>
 
-
-    <div class="section_one_three sidebar">
-
-        <h2 class="centered_title">Mes fournitures</h2>
-        <div class="roundimg"><a href="#" title=""><img src="images/icon_contact.png" alt="" title="" /></a></div>
-        <p class="centered_text">
-        </p>
-
-    </div>
-
   </div>
 
    <div class="clear"></div>

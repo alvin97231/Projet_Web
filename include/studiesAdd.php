@@ -4,8 +4,7 @@ include("fonction.inc");
 session_start();
 $login = $_SESSION['login'];
 $mdp = $_SESSION['mdp'];
-echo $login;
-echo $mdp;
+
 if (empty($_POST['matiere']) || empty($_POST['niveau']))
 	{
 		echo "<script> alert('Renseignez correctement tous les champs');</script>";
@@ -20,13 +19,19 @@ elseif (!empty($_POST['matiere']) && !empty($_POST['niveau']))
 		$niveau = $_POST['niveau'];
 
 		$bdd = connexionDB();
-
-		$req = $bdd->prepare("UPDATE professeur SET Matiere = $matiere WHERE id_Personne= (SELECT id_Personne
-																																											  FROM personne
-																																											  WHERE login = $login
-																																											  AND mdp = $mdp)" );
-		echo $req;
+		$query= "SELECT id_Personne FROM personne  WHERE login = '".$login."'";
+		$req = $bdd->prepare($query);
 		$req->execute();
-		echo "<script> window.location='../panel.php';</script>";
+		$result = $req->get_result();
+		$row = mysqli_fetch_array($result, MYSQLI_NUM);
+		$id_Prof = $row[0];
+
+    $query1 = "UPDATE professeur SET Matiere = '".$matiere."' WHERE id_Personne= $id_Prof" ;
+		$req1 = $bdd->prepare($query1);
+		$req1->execute();
+
+		$query2 = "INSERT INTO est_prof VALUES($niveau, $id_Prof)";
+		$req2 = $bdd->prepare($query2);
+		$req2->execute();
 	}
 ?>

@@ -85,29 +85,35 @@ function affectTypeUtilisateur($bdd)
 		  										FROM administrateur)";
 
 	$requete = $bdd->prepare($req);
-	$resultat = $requete->execute();
-	$row = $requete->fetch();
-
+	$requete->execute();
+	$result = $requete -> get_result();
+	$row = $result  -> fetch_array();
 	$_SESSION['type'] = 0;
 
 	if ( isset($row) ){
 		$_SESSION['type'] = 1;
+		$_SESSION['id_Eleve']=$row[0];
 	}
 	else if ($row == null) {
 		$requete = $bdd->prepare($req2);
 		$resultat = $requete->execute();
-		$row = $requete->fetch();
+		$result = $requete -> get_result();
+		$row = $result  -> fetch_array();
 
 		if ( isset($row) ){
 			$_SESSION['type'] = 2;
+			$_SESSION['id_Prof']=$row[0];
 		}
 		else if ($row == null) {
 			$requete = $bdd->prepare($req3);
 			$resultat = $requete->execute();
-			$row = $requete->fetch();
+			$requete -> get_result();
+			$row = $result -> fetch_array();
 
 			if ( isset($row) ){
 				$_SESSION['type'] = 3;
+				echo $_SESSION['type'];
+				$_SESSION['id_Admin']=$row[0];
 			}
 		}
 	}
@@ -154,36 +160,117 @@ function studiesAdminList($bdd)
 */
 function studiesTeacherList($bdd)
 {
+	$id_Prof = $_SESSION['id_Prof'];
 
-	$req = "SELECT id_Classe, Niveau FROM classe";
+	$query1 = "SELECT Matiere FROM professeur WHERE id_Personne = ?";
+	$query2 = "SELECT id_Classe FROM est_prof WHERE id_Personne = ?";
+	$query3 = "SELECT Niveau FROM classe WHERE id_Classe = ?";
 
-
-	$requete = $bdd->prepare($req);
-	$requete->execute();
-	$result = $requete -> get_result();
+	$stmt = $bdd->prepare($query1);
+	$stmt->bind_param("i",$val1);
+	$val1 = $id_Prof;
+	$stmt->execute();
+	$result = $stmt -> get_result();
 
 	while ($val = $result -> fetch_assoc())
 
 		{
-
-				$id = $val['id_Classe'];
-				$niveau = $val['Niveau'];
+				$matiere = $val['Matiere'];
 
 				echo "<tr>";
 
-				echo "<td>$id</td>";
-				echo "<td>$niveau</td>";
-
-				echo "</tr>\n";
-
+				echo "<td>$matiere</td>";
 		}
 
+		$stmt = $bdd->prepare($query2);
+		$stmt->bind_param("s",$val1);
+		$val1 = $id_Prof;
+		$stmt->execute();
+		$result = $stmt -> get_result();
+		$row = $result -> fetch_array( MYSQLI_NUM);
+		$id_Classe = $row[0];
+
+		$stmt = $bdd->prepare($query3);
+		$stmt->bind_param("i",$val1);
+		$val1 = $id_Classe;
+		$stmt->execute();
+		$result = $stmt -> get_result();
+
+		while ($val = $result -> fetch_assoc())
+
+			{
+					$matiere = $val['Niveau'];
+
+					echo "<td>$matiere</td>";
+			}
+
+	echo "</tr>\n";
+	mysqli_stmt_close($stmt);
 	$result -> free();
 	//$bdd -> close();
 }
 
 /**
- * Fournit la liste des enfants et les informations les concernant dans un tableau
+ * Fournit la liste des fournitures dans un tableau en fonction du prof
+ * @param $bdd objet msqli
+ * @return Array
+*/
+function suppliesTeacherList($bdd)
+{
+	$id_Prof = $_SESSION['id_Prof'];
+
+	$query1= "SELECT id_Fourniture FROM choisir  WHERE id_Personne = ?";
+	$query2= "SELECT Quantite FROM contenir  WHERE id_Fourniture = ?";
+	$query3= "SELECT Libelle FROM fourniture  WHERE id_Fourniture = ?";
+
+	$stmt = $bdd->prepare($query1);
+	$stmt->bind_param("s",$val1);
+	$val1 = $id_Prof;
+	$stmt->execute();
+	$result = $stmt -> get_result();
+	$row = $result -> fetch_all();
+
+	for($i = 0; $i < count($row); ++$i) {
+		$id_Fourniture = $row[$i][0];
+
+		$stmt = $bdd->prepare($query2);
+		$stmt->bind_param("i",$val1);
+		$val1 = $id_Fourniture;
+		$stmt->execute();
+		$result = $stmt -> get_result();
+
+		while ($val = $result -> fetch_assoc())
+
+			{
+					$quantite = $val['Quantite'];
+
+					echo "<tr>";
+
+					echo "<td>$quantite</td>";
+			}
+
+			$stmt = $bdd->prepare($query3);
+			$stmt->bind_param("i",$val1);
+			$val1 = $id_Fourniture;
+			$stmt->execute();
+			$result = $stmt -> get_result();
+
+			while ($val = $result -> fetch_assoc())
+
+				{
+						$libelle = $val['Libelle'];
+
+						echo "<td>$libelle</td>";
+				}
+	}
+	echo "</tr>\n";
+	mysqli_stmt_close($stmt);
+	$result -> free();
+	//$bdd -> close();
+}
+
+/**
+ * Fournit la liste utilisateurs dans un tableau
  * @param $bdd
  * @return Array
 */

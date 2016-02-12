@@ -6,5 +6,4 @@ include("fonction.inc");
 
 	$bdd = connexionDB();
 	initSessionUtilisateur($bdd, $login, $mdp);
-	//affecterIdUtilisateur($bdd, $login, $mdp);
 ?>
