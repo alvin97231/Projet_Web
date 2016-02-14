@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Lun 11 Janvier 2016 à 00:00
+-- Généré le :  Dim 14 Février 2016 à 20:38
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.4.24
 
@@ -52,6 +52,17 @@ CREATE TABLE IF NOT EXISTS `choisir` (
   KEY `FK_CHOISIR_id_Fourniture` (`id_Fourniture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Contenu de la table `choisir`
+--
+
+INSERT INTO `choisir` (`id_Personne`, `id_Fourniture`) VALUES
+(4, 11),
+(4, 12),
+(4, 13),
+(4, 14),
+(6, 15);
+
 -- --------------------------------------------------------
 
 --
@@ -62,16 +73,16 @@ CREATE TABLE IF NOT EXISTS `classe` (
   `id_Classe` int(11) NOT NULL AUTO_INCREMENT,
   `Niveau` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id_Classe`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `classe`
 --
 
 INSERT INTO `classe` (`id_Classe`, `Niveau`) VALUES
-(2, 'Terminale'),
-(3, 'Seconde'),
-(4, 'Premiere');
+(1, 'Seconde'),
+(2, 'Premiere'),
+(3, 'Terminale');
 
 -- --------------------------------------------------------
 
@@ -81,11 +92,22 @@ INSERT INTO `classe` (`id_Classe`, `Niveau`) VALUES
 
 CREATE TABLE IF NOT EXISTS `contenir` (
   `Quantite` int(11) NOT NULL,
-  `id_Liste` int(11) NOT NULL,
+  `id_Liste` int(11) NOT NULL DEFAULT '0',
   `id_Fourniture` int(11) NOT NULL,
   PRIMARY KEY (`id_Liste`,`id_Fourniture`),
   KEY `FK_CONTENIR_id_Fourniture` (`id_Fourniture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `contenir`
+--
+
+INSERT INTO `contenir` (`Quantite`, `id_Liste`, `id_Fourniture`) VALUES
+(2, 0, 11),
+(1, 0, 12),
+(3, 0, 13),
+(3, 0, 14),
+(2, 0, 15);
 
 -- --------------------------------------------------------
 
@@ -107,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `eleve` (
 --
 
 INSERT INTO `eleve` (`id_Personne`, `id_Liste`, `id_Classe`) VALUES
-(3, NULL, NULL);
+(3, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -122,6 +144,14 @@ CREATE TABLE IF NOT EXISTS `est_prof` (
   KEY `FK_EST_PROF_id_Personne` (`id_Personne`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Contenu de la table `est_prof`
+--
+
+INSERT INTO `est_prof` (`id_Classe`, `id_Personne`) VALUES
+(1, 4),
+(1, 6);
+
 -- --------------------------------------------------------
 
 --
@@ -132,7 +162,18 @@ CREATE TABLE IF NOT EXISTS `fourniture` (
   `id_Fourniture` int(11) NOT NULL AUTO_INCREMENT,
   `Libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_Fourniture`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+
+--
+-- Contenu de la table `fourniture`
+--
+
+INSERT INTO `fourniture` (`id_Fourniture`, `Libelle`) VALUES
+(11, 'Testing'),
+(12, 'Cahier petit carreau '),
+(13, 'Test 3'),
+(14, 'bitch'),
+(15, 'testSecondProf');
 
 -- --------------------------------------------------------
 
@@ -159,16 +200,19 @@ CREATE TABLE IF NOT EXISTS `personne` (
   `mdp` varchar(25) NOT NULL,
   PRIMARY KEY (`id_Personne`),
   UNIQUE KEY `login` (`login`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Contenu de la table `personne`
 --
 
 INSERT INTO `personne` (`id_Personne`, `Nom`, `Prenom`, `login`, `mdp`) VALUES
-(1, 'EUSTACHE', 'Alvin', 'alvin.eustache@gmail.com', 'bitch'),
-(2, 'TOYBA', 'Hamada', 'hamada.toyba@u-psud.fr', 'bitch2'),
-(3, 'eleve', 'test', 'eleve@test.com', 'test');
+(1, 'EUSTACHE', 'Alvin', 'alvin.eustache@gmail.com', 'bitchtest'),
+(2, 'TOYBA', 'Hamada', 'hamada.toyba@u-psud.fr', 'bitch2test'),
+(3, 'eleve', 'test', 'eleve@test.com', 'testeleve'),
+(4, 'prof', 'test', 'prof1@test.com', 'testprof'),
+(5, 'prof2', 'test2', 'prof2@test.com', '0'),
+(6, 'prof3', 'test3', 'prof3@test.com', 'prof3test3');
 
 -- --------------------------------------------------------
 
@@ -177,10 +221,19 @@ INSERT INTO `personne` (`id_Personne`, `Nom`, `Prenom`, `login`, `mdp`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `professeur` (
-  `Matiere` varchar(25) NOT NULL,
+  `Matiere` varchar(25) DEFAULT NULL,
   `id_Personne` int(11) NOT NULL,
   PRIMARY KEY (`id_Personne`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `professeur`
+--
+
+INSERT INTO `professeur` (`Matiere`, `id_Personne`) VALUES
+('mathematiques', 4),
+(NULL, 5),
+('francais', 6);
 
 --
 -- Contraintes pour les tables exportées
@@ -203,8 +256,7 @@ ALTER TABLE `choisir`
 -- Contraintes pour la table `contenir`
 --
 ALTER TABLE `contenir`
-  ADD CONSTRAINT `FK_CONTENIR_id_Fourniture` FOREIGN KEY (`id_Fourniture`) REFERENCES `fourniture` (`id_Fourniture`),
-  ADD CONSTRAINT `FK_CONTENIR_id_Liste` FOREIGN KEY (`id_Liste`) REFERENCES `liste` (`id_Liste`);
+  ADD CONSTRAINT `FK_CONTENIR_id_Fourniture` FOREIGN KEY (`id_Fourniture`) REFERENCES `fourniture` (`id_Fourniture`);
 
 --
 -- Contraintes pour la table `eleve`

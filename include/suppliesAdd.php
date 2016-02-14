@@ -37,7 +37,7 @@ elseif (!empty($_POST['libelle']) && !empty($_POST['quantite']))
 		$val1 = '';
 		$val2 = $libelle;
 		$stmt->execute();
-		mysqli_stmt_close($stmt);
+		$stmt->close();
 
 		$id_Fourniture = mysqli_insert_id($bdd);
 
@@ -46,14 +46,14 @@ elseif (!empty($_POST['libelle']) && !empty($_POST['quantite']))
 		$val1 = $quantite;
 		$val2 = $id_Fourniture;
 		$stmt->execute();
-		mysqli_stmt_close($stmt);
+		$stmt->close();
 
 		$stmt = $bdd->prepare($query3);
 		$stmt->bind_param("ss",$val1, $val2);
 		$val1 = $id_Prof;
 		$val2 = $id_Fourniture;
 		$stmt->execute();
-		mysqli_stmt_close($stmt);
+		$stmt->close();
 
 		echo "<script> window.location='../supplies.php';</script>";
 	}

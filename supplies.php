@@ -26,36 +26,31 @@
   <div class="main_content">
 
     <div class="section_two_three entry">
-
-     <table>
-       <thead>
-         <tr>
-           <th>Quantité</th>
-           <th>Libellé</th>
-         </tr>
-       </thead>
-       <tbody>
          <?php
-          if($_SESSION['type']== 1){
-
-          }
-          elseif ($_SESSION['type']== 2) {
-            suppliesTeacherList($bdd);
-          }
+         if($_SESSION['type']==1) {
+           suppliesStudentList($bdd);
+         }
+         else if($_SESSION['type']==2) {
+           suppliesTeacherList($bdd);
+         }
+         else if($_SESSION['type']==3) {
+           suppliesAdminList($bdd);
+         }
          ?>
-       </tbody>
-     </table>
-
     </div>
 
 
     <div class="section_one_three sidebar">
 
-        <h2 class="centered_title">Mes fournitures</h2>
+        <h2 class="centered_title">Fournitures</h2>
         <div class="roundimg"><a href="#" title=""><img src="images/icon_services.png" alt="" title="" /></a></div>
         <p class="centered_text">
         </p>
-        <a href="#oModal" class="more">Ajouter</a>
+        <?php
+        if($_SESSION['type']==2) {
+          echo '<a href="#oModal" class="more">Ajouter</a>';
+        }
+        ?>
 
     </div>
 

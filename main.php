@@ -25,13 +25,13 @@
   <div class="main_content">
 
     <?php
-      if($_SESSION['type']==2){
+      if($_SESSION['type']==3){
 
         $display='';
 
         $display.='<div class="section_one_three">';
         $display.='<h2 class="centered_title">Gestion des Utilisateurs</h2>';
-        $display.='<div class="panel"><a href="studies.php" title=""><img src="images/users.png" alt="" title="" /></a></div>';
+        $display.='<div class="panel"><a href="main_panel.php" title=""><img src="images/users.png" alt="" title="" /></a></div>';
         $display.='<p class="centered_text">';
         $display.='</p>';
         $display.='<a href="studies.php" class="more">Aller!</a>';
@@ -47,7 +47,7 @@
 
         $display.='<div class="section_one_three">';
         $display.='<h2 class="centered_title">Statistiques</h2>';
-        $display.='<div class="panel"><a href="#" title=""><img src="images/chart.png" alt="" title="" /></a></div>';
+        $display.='<div class="panel"><a href="statistique.php" title=""><img src="images/chart.png" alt="" title="" /></a></div>';
         $display.='<p class="centered_text">';
         $display.='</p>';
         $display.='<a href="#" class="more">Aller!</a>';
@@ -56,7 +56,7 @@
         echo $display;
       }
 
-      else if($_SESSION['type']==3){
+      else if($_SESSION['type']==2){
 
         $display='';
 

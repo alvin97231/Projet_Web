@@ -25,7 +25,7 @@
 
   <div class="main_content">
 
-    <div class="section_one_three">
+    <!--<div class="section_two_three entry">
 
     <h2 class="centered_title">Enseignements</h2>
 
@@ -38,14 +38,14 @@
        </thead>
        <tbody>
          <?php
-          studiesAdminList($bdd);
+          //studiesAdminList($bdd);
         ?>
        </tbody>
      </table>
 
-    </div>
+   </div>-->
 
-     <div class="section_one_three">
+     <div class="section_two_three entry">
 
      <h2 class="centered_title">Utilisateurs</h2>
 
@@ -56,6 +56,7 @@
             <th>Nom</th>
             <th>Prenom</th>
             <th>Login</th>
+            <th colspan="2">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -67,15 +68,30 @@
 
     </div>
 
+    <div class="section_one_three sidebar">
+
+        <h2 class="centered_title">Gestion des Utilisateurs</h2>
+        <div class="panel"><img src="images/users.png" alt="" title="" /></div>
+        <p class="centered_text">
+        </p>
+        <a href="#oModal" class="more">Ajouter</a>
+
+    </div>
+
     <div id="oModal" class="oModal">
       <div>
         <header>
           <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
-           <h2>Ajouter une fourniture</h2>
+           <h2>Ajouter un utilisateur</h2>
          </header>
-         <form action="include/ajout.php" method="post">
+         <form action="include/usersAdd.php" method="post">
            <section>
-             <input name="level" class="form-control" type="text" placeholder="Niveau"/></br>
+             <input name="nom" class="form-control" type="text" placeholder="Nom"/></br>
+             <input name="prenom" class="form-control" type="text" placeholder="Prénom"/></br>
+             <input name="email" class="form-control" type="email" placeholder="E-mail"/></br></br>
+             <label class="form-control">Administrateur<input type="radio" name="role" value="administrateur"></label>
+             <label class="form-control">Professeur<input type="radio" name="role" value="professeur"></label>
+             <label class="form-control">Eleve<input type="radio" name="role" value="eleve" ></label>
            <section>
            <footer class="cf">
             <input value="Ajouter" name="classe" class="form-control" type="submit"/>

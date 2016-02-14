@@ -18,7 +18,7 @@
     ?>
 
     </div>
-  </div><!-- End of Header-->
+  </div>
 
 <div id="wrap">
 
@@ -26,33 +26,28 @@
   <div class="main_content">
 
     <div class="section_two_three entry">
-
-     <table>
-       <thead>
-         <tr>
-           <th>Discipline</th>
-           <th>Niveau</th>
-         </tr>
-       </thead>
-       <tbody>
          <?php
-<<<<<<< HEAD
-          studiesTeacherList($bdd)
-=======
->>>>>>> a4d404596d9c7bda7e574c62111df9f97af08b82
+         if($_SESSION['type']==3) {
+           studiesAdminList($bdd);
+         }
+         else if($_SESSION['type']==2) {
+           studiesTeacherList($bdd);
+         }
          ?>
-       </tbody>
-     </table>
-
     </div>
 
     <div class="section_one_three sidebar">
 
-        <h2 class="centered_title">Mes enseignements</h2>
+        <h2 class="centered_title">Enseignements</h2>
         <div class="roundimg"><a href="#" title=""><img src="images/icon_clients.png" alt="" title="" /></a></div>
         <p class="centered_text">
         </p>
-        <a href="#oModal" class="more">Ajouter</a>
+        <?php
+        if($_SESSION['type']==2) {
+          echo '<a href="#oModal" class="more">Ajouter</a>';
+        }
+        ?>
+
 
     </div>
 
@@ -77,15 +72,9 @@
                 <option value="chimie">Chimie</option>
             </select>
             <select name="niveau" class="form-control">
-<<<<<<< HEAD
               <option value="1">Seconde</option>
               <option value="2">Première</option>
               <option value="3">Terminale</option>
-=======
-              <option value="Seconde">Seconde</option>
-              <option value="Premiere">Première</option>
-              <option value="Terminale">Terminale</option>
->>>>>>> a4d404596d9c7bda7e574c62111df9f97af08b82
             </select></br>
          <section>
          <footer class="cf">

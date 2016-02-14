@@ -7,6 +7,22 @@
     affectTypeUtilisateur($bdd);
     verifConnecte();
 ?>
+  <div id="header">
+  	<div class="header_content">
+
+  	<div class="logo"><a href="main.php">F4U</a> <span>| application de gestion des fournitures</span></div>
+
+    <?php
+      require($AppelInclude . "menu.inc.php");
+    ?>
+
+    </div>
+  </div><!-- End of Header-->
+
+<div id="wrap">
+
+
+  <div class="main_content">
 
 <script  language="Javascript" >
 function makeGraph(container, labels)
@@ -50,6 +66,13 @@ window.onload=function () { makeGraph("graph", "labels") }
 </div>
 <div id="labels">Matières</div>
 
+</div>
+
+ <div class="clear"></div>
+
+
+</div>
+
 <?php
-    require($AppelInclude . "footer.inc.html");
+  require($AppelInclude . "footer.inc.html");
 ?>

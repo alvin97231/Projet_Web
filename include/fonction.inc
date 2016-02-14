@@ -19,7 +19,7 @@ function connexionDB()
 
 /**
  * Connecte un utilisateur avec ses parametre
- * @param $bdd objet PDO
+ * @param $bdd objet myqli
  * @param $login string de $POST['login']
  * @param $mdp string de $POST['mdp']
  * @return session demarrée ou redirection si mauvaises valeurs
@@ -34,6 +34,7 @@ function initSessionUtilisateur($bdd, $login, $mdp)
 
 	$requete = $bdd->prepare($req);
 	$resultat = $requete->execute();
+	$requete->bind_result($log, $md, $id);
 	$row = $requete->fetch();
 
 		if (!$row)
@@ -43,10 +44,10 @@ function initSessionUtilisateur($bdd, $login, $mdp)
 		}
 		else
 		{
-	    	session_start();
-	    	$_SESSION['login'] = $login;
-	    	$_SESSION['mdp'] = $mdp;
-	    	echo "<script> alert('Vous \352tes connect\351');</script>";
+	    session_start();
+	    $_SESSION['login'] = $login;
+	    $_SESSION['mdp'] = $mdp;
+	    echo "<script> alert('Vous \352tes connect\351');</script>";
 			echo "<script> window.location='../main.php';</script>";
 	}
 }
@@ -63,95 +64,59 @@ function affectTypeUtilisateur($bdd)
 	$login = $_SESSION['login'];
 	$mdp = $_SESSION['mdp'];
 
-	$req = "SELECT id_Personne
+	$req1 = "SELECT id_Personne
 			FROM personne
 			WHERE login =  '".$login."'
 			AND mdp = '".$mdp."'
-			AND id_Personne = (SELECT id_Personne
+			AND id_Personne IN (SELECT id_Personne
 													FROM eleve)";
 
 	$req2 = "SELECT id_Personne
 			FROM personne
 			WHERE login =  '".$login."'
 			AND mdp = '".$mdp."'
-			AND id_Personne = (SELECT id_Personne
+			AND id_Personne IN (SELECT id_Personne
 													FROM professeur)";
 
 	$req3 = "SELECT id_Personne
 		  FROM personne
 		  WHERE login =  '".$login."'
 		  AND mdp = '".$mdp."'
-		  AND id_Personne = (SELECT id_Personne
+		  AND id_Personne IN (SELECT id_Personne
 		  										FROM administrateur)";
 
-	$requete = $bdd->prepare($req);
-
-	$resultat = $requete->execute();
-	echo($resultat);
-	$row = $requete->fetch();
+	$stmt = $bdd->prepare($req1);
+	$stmt->execute();
+	$stmt->bind_result($id);
+	$row = $stmt->fetch();
 	$_SESSION['type'] = 0;
 
-	if ( isset($row) ){
+	if ( $row ){
 		$_SESSION['type'] = 1;
-		$_SESSION['id_Eleve']=$row[0];
+		$_SESSION['id_Eleve']=$id;
 	}
-	else if ($row == null) {
-		$requete = $bdd->prepare($req2);
-		$resultat = $requete->execute();
-		echo($resultat);
-		$row = $requete->fetch();
+	else if (!$row) {
+		$stmt = $bdd->prepare($req2);
+		$stmt->execute();
+		$stmt->bind_result($id);
+		$row = $stmt->fetch();
 
-		if ( isset($row) ){
+		if ( $row ){
 			$_SESSION['type'] = 2;
-			$_SESSION['id_Prof']=$row[0];
+			$_SESSION['id_Prof']=$id;
 		}
-		else if ($row == null) {
-			$requete = $bdd->prepare($req3);
-			$resultat = $requete->execute();
-			echo($resultat);
-			$row = $requete->fetch();
+		else if (!$row) {
+			$stmt = $bdd->prepare($req3);
+			$stmt->execute();
+			$stmt->bind_result($id);
+			$row = $stmt->fetch();
 
-			if ( isset($row) ){
+			if ( $row ){
 				$_SESSION['type'] = 3;
-				echo $_SESSION['type'];
-				$_SESSION['id_Admin']=$row[0];
+				$_SESSION['id_Admin']=$id;
 			}
 		}
 	}
-}
-
-/**
- * Fournit la liste des enseignements dans un tableau
- * @param $bdd objet msqli
- * @return Array
-*/
-function studiesAdminList($bdd)
-{
-
-	$req = "SELECT id_Classe, Niveau FROM classe";
-
-	$requete = $bdd->prepare($req);
-	$requete->execute();
-	$result = $requete -> get_result();
-
-	while ($val = $result -> fetch_assoc())
-
-		{
-
-				$id = $val['id_Classe'];
-				$niveau = $val['Niveau'];
-
-				echo "<tr>";
-
-				echo "<td>$id</td>";
-				echo "<td>$niveau</td>";
-
-				echo "</tr>\n";
-
-		}
-
-	$result -> free();
-	//$bdd -> close();
 }
 
 /**
@@ -172,15 +137,16 @@ function studiesTeacherList($bdd)
 	$val1 = $id_Prof;
 	$stmt->execute();
 	$result = $stmt -> get_result();
+	$display="";
+	$display.='<table><thead><tr><th>Discipline</th><th>Niveau</th></tr></thead><tbody>';
 
 	while ($val = $result -> fetch_assoc())
 
 		{
 				$matiere = $val['Matiere'];
 
-				echo "<tr>";
-
-				echo "<td>$matiere</td>";
+				$display.="<tr>";
+				$display.="<td>$matiere</td>";
 		}
 
 		$stmt = $bdd->prepare($query2);
@@ -202,13 +168,84 @@ function studiesTeacherList($bdd)
 			{
 					$matiere = $val['Niveau'];
 
-					echo "<td>$matiere</td>";
+					$display.="<td>$matiere</td>";
 			}
 
-	echo "</tr>\n";
-	mysqli_stmt_close($stmt);
+			$display.='</tr></tbody></table>';
+	echo $display;
+	$stmt -> close();
 	$result -> free();
 	//$bdd -> close();
+}
+
+/**
+ * Fournit la liste des enseignements dans un tableau
+ * @param $bdd objet msqli
+ * @return Array
+*/
+function studiesAdminList($bdd)
+{
+
+	$query1 = "SELECT Matiere, id_Personne FROM professeur";
+	$query2 = "SELECT id_Classe FROM est_prof WHERE id_Personne = ?";
+	$query3 = "SELECT Niveau FROM classe WHERE id_Classe = ?";
+	$query4 = "SELECT Nom , Prenom FROM personne WHERE id_Personne = ?";
+
+	$stmt = $bdd->prepare($query1);
+	$stmt->execute();
+	$result = $stmt -> get_result();
+	$row = $result -> fetch_all();
+	$display="";
+	$display.='<table><thead><tr><th>Discipline</th><th>Niveau</th><th colspan="2">Professeur</th></tr></thead><tbody>';
+
+	foreach ($row as $value){
+
+			if($value[0] !== NULL){
+				$matiere = $value[0];
+				$id_Personne = $value[1];
+
+				$display.='<tr>';
+				$display.="<td>$matiere</td>";
+
+				$stmt = $bdd->prepare($query2);
+				$stmt->bind_param("s",$val1);
+				$val1 = $id_Personne;
+				$stmt->execute();
+				$result = $stmt -> get_result();
+				$row = $result -> fetch_array( MYSQLI_NUM);
+				$id_Classe = $row[0];
+
+				$stmt = $bdd->prepare($query3);
+				$stmt->bind_param("i",$val1);
+				$val1 = $id_Classe;
+				$stmt->execute();
+				$result = $stmt -> get_result();
+				$val = $result -> fetch_assoc();
+
+				$niveau= $val['Niveau'];
+				$display.="<td>$niveau</td>";
+
+				$stmt = $bdd->prepare($query4);
+				$stmt->bind_param("i",$val1);
+				$val1 = $id_Personne;
+				$stmt->execute();
+				$result = $stmt -> get_result();
+				$val = $result -> fetch_assoc();
+
+				$nom= $val['Nom'];
+				$prenom= $val['Prenom'];
+
+				$display.="<td>$nom</td>";
+				$display.="<td>$prenom</td>";
+			}
+		}
+
+	$display.='</tr></tbody></table>';
+	echo $display;
+
+	$stmt->close();
+	$result -> free();
+	$bdd -> close();
 }
 
 /**
@@ -220,6 +257,8 @@ function suppliesTeacherList($bdd)
 {
 	$id_Prof = $_SESSION['id_Prof'];
 
+	$display='';
+
 	$query1= "SELECT id_Fourniture FROM choisir  WHERE id_Personne = ?";
 	$query2= "SELECT Quantite FROM contenir  WHERE id_Fourniture = ?";
 	$query3= "SELECT Libelle FROM fourniture  WHERE id_Fourniture = ?";
@@ -230,6 +269,7 @@ function suppliesTeacherList($bdd)
 	$stmt->execute();
 	$result = $stmt -> get_result();
 	$row = $result -> fetch_all();
+	$display.='<table><thead><tr><th>Quantité</th><th>Libellé</th></tr></thead><tbody>';
 
 	for($i = 0; $i < count($row); ++$i) {
 		$id_Fourniture = $row[$i][0];
@@ -245,9 +285,9 @@ function suppliesTeacherList($bdd)
 			{
 					$quantite = $val['Quantite'];
 
-					echo "<tr>";
+					$display.= "<tr>";
 
-					echo "<td>$quantite</td>";
+					$display.= "<td>$quantite</td>";
 			}
 
 			$stmt = $bdd->prepare($query3);
@@ -261,13 +301,165 @@ function suppliesTeacherList($bdd)
 				{
 						$libelle = $val['Libelle'];
 
-						echo "<td>$libelle</td>";
+						$display.= "<td>$libelle</td>";
 				}
 	}
-	echo "</tr>\n";
-	mysqli_stmt_close($stmt);
+	$display.= "</tr>\n";
+	$display.= "</tbody></table>";
+	echo $display;
+	$stmt->close();
 	$result -> free();
 	//$bdd -> close();
+}
+
+/**
+ * Fournit la liste des fournitures dans un tableau en fonction du prof
+ * @param $bdd objet msqli
+ * @return Array
+*/
+function suppliesStudentList($bdd)
+{
+	$display='';
+
+	$id_Eleve = $_SESSION['id_Eleve'];
+
+	$query1= "SELECT id_Classe FROM eleve  WHERE id_Personne = ?";
+	$query2= "SELECT id_Personne FROM est_prof  WHERE id_Classe = ?";
+	$query3= "SELECT id_Fourniture FROM choisir  WHERE id_Personne = ?";
+	$query4= "SELECT Quantite FROM contenir  WHERE id_Fourniture = ?";
+	$query5= "SELECT Libelle FROM fourniture  WHERE id_Fourniture = ?";
+
+	$stmt = $bdd->prepare($query1);
+	$stmt->bind_param("s",$val1);
+	$val1 = $id_Eleve;
+	$stmt->execute();
+	$stmt->bind_result($id);
+	$row = $stmt -> fetch();
+	$id_Classe = $id;
+	$stmt->close();
+
+	$stmt = $bdd->prepare($query2);
+	$stmt->bind_param("s",$id_Classe);
+	$stmt->execute();
+	$result = $stmt -> get_result();
+	$row = $result -> fetch_all();
+	$display.='<table><thead><tr><th>Quantité</th><th>Libellé</th></tr></thead><tbody>';
+
+	foreach ($row as $value) {
+		foreach ($value as $key) {
+
+			$stmt = $bdd->prepare($query3);
+			$stmt->bind_param("s",$val1);
+			$val1 = $key;
+			$stmt->execute();
+			$result = $stmt -> get_result();
+			$row = $result -> fetch_all();
+
+			for($i = 0; $i < count($row); ++$i) {
+				$id_Fourniture = $row[$i][0];
+
+				$stmt = $bdd->prepare($query4);
+				$stmt->bind_param("i",$val1);
+				$val1 = $id_Fourniture;
+				$stmt->execute();
+				$result = $stmt -> get_result();
+
+				while ($val = $result -> fetch_assoc())
+
+					{
+							$quantite = $val['Quantite'];
+
+							$display.="<tr>";
+
+							$display.="<td>$quantite</td>";
+					}
+
+					$stmt = $bdd->prepare($query5);
+					$stmt->bind_param("i",$val1);
+					$val1 = $id_Fourniture;
+					$stmt->execute();
+					$result = $stmt -> get_result();
+
+					while ($val = $result -> fetch_assoc())
+
+						{
+								$libelle = $val['Libelle'];
+
+								$display.= "<td>$libelle</td>";
+						}
+			}
+			$display.= "</tr>\n";
+			$display.= "</tbody></table>";
+			echo $display;
+			$stmt->close();
+			$result -> free();
+		}
+	}
+}
+
+/**
+ * Fournit la liste des fournitures dans un tableau en fonction du prof
+ * @param $bdd objet msqli
+ * @return Array
+*/
+function suppliesAdminList($bdd)
+{
+	$display='';
+
+	$query1= "SELECT id_Fourniture , id_Personne FROM choisir ";
+	$query2= "SELECT Quantite FROM contenir  WHERE id_Fourniture = ?";
+	$query3= "SELECT Libelle FROM fourniture  WHERE id_Fourniture = ?";
+	$query4 = "SELECT Nom , Prenom FROM personne WHERE id_Personne = ?";
+
+	$stmt = $bdd->prepare($query1);
+	$stmt->execute();
+	$stmt->bind_result($id_Fourniture, $id_Personne);
+	$result = $stmt -> get_result();
+	$row = $result -> fetch_all();
+	//$stmt->close();
+
+	$display.='<table><thead><tr><th>Quantité</th><th>Libellé</th><th colspan="2">Professeur</th></tr></thead><tbody>';
+
+	foreach ($row as $value) {
+		$stmt = $bdd->prepare($query2);
+		$stmt->bind_param("i",$val1);
+		$val1 = $value[0];
+		$stmt->execute();
+		$result = $stmt -> get_result();
+		$val = $result -> fetch_assoc();
+
+		$quantite = $val['Quantite'];
+		$display.="<tr>";
+		$display.="<td>$quantite</td>";
+
+		$stmt = $bdd->prepare($query3);
+		$stmt->bind_param("i",$val1);
+		$val1 = $value[0];
+		$stmt->execute();
+		$result = $stmt -> get_result();
+		$val = $result -> fetch_assoc();
+
+		$libelle = $val['Libelle'];
+		$display.="<td>$libelle</td>";
+
+		$stmt = $bdd->prepare($query4);
+		$stmt->bind_param("i",$val1);
+		$val1 = $value[1];
+		$stmt->execute();
+		$result = $stmt -> get_result();
+		$val = $result -> fetch_assoc();
+
+		$nom= $val['Nom'];
+		$prenom= $val['Prenom'];
+
+		$display.="<td>$nom</td>";
+		$display.="<td>$prenom</td>";
+	}
+	$display.= "</tr>\n";
+	$display.= "</tbody></table>";
+	echo $display;
+	$stmt->close();
+	$result -> free();
 }
 
 /**
@@ -298,6 +490,8 @@ function usersList($bdd)
 				echo "<td>$nom</td>";
 				echo "<td>$prenom</td>";
 				echo "<td>$login</td>";
+				echo '<td></td>';
+				echo '<td></td>';
 
 				echo "</tr>\n";
 
@@ -333,7 +527,7 @@ function convertirDateAnglaisVersFrancais($date)
 
 function estUtilisateurConnecte()
 {
-    return isset($_SESSION["login"]);
+    return isset($_SESSION['login']);
 }
 
  function verifConnecte()
@@ -341,10 +535,6 @@ function estUtilisateurConnecte()
  	if(! estUtilisateurConnecte())
  	{
  		header("location:./index.php");
- 	}
- 	else
- 	{
-
  	}
  }
 ?>
