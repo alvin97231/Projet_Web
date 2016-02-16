@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Dim 14 Février 2016 à 20:38
+-- Généré le :  Mar 16 Février 2016 à 23:08
 -- Version du serveur :  5.6.15-log
 -- Version de PHP :  5.4.24
 
@@ -61,7 +61,9 @@ INSERT INTO `choisir` (`id_Personne`, `id_Fourniture`) VALUES
 (4, 12),
 (4, 13),
 (4, 14),
-(6, 15);
+(6, 15),
+(4, 16),
+(4, 17);
 
 -- --------------------------------------------------------
 
@@ -107,7 +109,9 @@ INSERT INTO `contenir` (`Quantite`, `id_Liste`, `id_Fourniture`) VALUES
 (1, 0, 12),
 (3, 0, 13),
 (3, 0, 14),
-(2, 0, 15);
+(2, 0, 15),
+(1, 0, 16),
+(3, 0, 17);
 
 -- --------------------------------------------------------
 
@@ -129,7 +133,8 @@ CREATE TABLE IF NOT EXISTS `eleve` (
 --
 
 INSERT INTO `eleve` (`id_Personne`, `id_Liste`, `id_Classe`) VALUES
-(3, NULL, 1);
+(3, NULL, 1),
+(7, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -150,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `est_prof` (
 
 INSERT INTO `est_prof` (`id_Classe`, `id_Personne`) VALUES
 (1, 4),
+(2, 4),
 (1, 6);
 
 -- --------------------------------------------------------
@@ -162,18 +168,20 @@ CREATE TABLE IF NOT EXISTS `fourniture` (
   `id_Fourniture` int(11) NOT NULL AUTO_INCREMENT,
   `Libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_Fourniture`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
 --
 -- Contenu de la table `fourniture`
 --
 
 INSERT INTO `fourniture` (`id_Fourniture`, `Libelle`) VALUES
-(11, 'Testing'),
+(11, 'Pochette'),
 (12, 'Cahier petit carreau '),
-(13, 'Test 3'),
-(14, 'bitch'),
-(15, 'testSecondProf');
+(13, 'Classeur'),
+(14, 'Stylo'),
+(15, 'Feuilles'),
+(16, 'Cahier petit carreau'),
+(17, 'stylo');
 
 -- --------------------------------------------------------
 
@@ -200,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `personne` (
   `mdp` varchar(25) NOT NULL,
   PRIMARY KEY (`id_Personne`),
   UNIQUE KEY `login` (`login`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Contenu de la table `personne`
@@ -211,8 +219,9 @@ INSERT INTO `personne` (`id_Personne`, `Nom`, `Prenom`, `login`, `mdp`) VALUES
 (2, 'TOYBA', 'Hamada', 'hamada.toyba@u-psud.fr', 'bitch2test'),
 (3, 'eleve', 'test', 'eleve@test.com', 'testeleve'),
 (4, 'prof', 'test', 'prof1@test.com', 'testprof'),
-(5, 'prof2', 'test2', 'prof2@test.com', '0'),
-(6, 'prof3', 'test3', 'prof3@test.com', 'prof3test3');
+(5, 'prof2', 'test2', 'prof2@test.com', 'prof2test2'),
+(6, 'prof3', 'test3', 'prof3@test.com', 'prof3test3'),
+(7, 'haada', 'tedt', 'rest@test.com', 'haadatedt');
 
 -- --------------------------------------------------------
 
@@ -231,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `professeur` (
 --
 
 INSERT INTO `professeur` (`Matiere`, `id_Personne`) VALUES
-('mathematiques', 4),
+('histoire', 4),
 (NULL, 5),
 ('francais', 6);
 

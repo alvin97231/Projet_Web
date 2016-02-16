@@ -488,12 +488,11 @@ function usersList($bdd)
 
 				echo "<tr>";
 				echo "<td>$id</td>";
-				echo "<td>>$nom</td>";
+				echo "<td>$nom</td>";
 				echo "<td>$prenom</td>";
 				echo "<td>$login</td>";
-				echo "<td><a href=\"main_panel.php&nom=$nom#oModal\">modifier</td>";
-				echo '<td></td>';
-				echo '<td></td>';
+				echo '<td><a href="main_panel.php?id='. $id .'&nom='. $nom .'&prenom='. $prenom .'&mail='. $login .'#oModal">modifier</a></td>';
+				echo '<td><a href="include/usersDel.php?id='. $id .'">supprimer</a></td>';
 				echo "</tr>\n";
 		}
 

@@ -84,18 +84,34 @@
           <a href="#fermer" title="Fermer la fenêtre" class="droite">X</a>
            <h2>Ajouter un utilisateur</h2>
          </header>
-         <form action="include/usersAdd.php" method="post">
-           <section>
-             <input name="nom" class="form-control" type="text" placeholder="Nom"/></br>
-             <input name="prenom" class="form-control" type="text" placeholder="Prénom"/></br>
-             <input name="email" class="form-control" type="email" placeholder="E-mail"/></br></br>
-             <label class="form-control">Administrateur<input type="radio" name="role" value="administrateur"></label>
-             <label class="form-control">Professeur<input type="radio" name="role" value="professeur"></label>
-             <label class="form-control">Eleve<input type="radio" name="role" value="eleve" ></label>
-           <section>
-           <footer class="cf">
-            <input value="Ajouter" name="classe" class="form-control" type="submit"/>
-            <a href="#fermer" class="btn droite" title="Fermer la fenêtre"><input value="Fermer" class="form-control" type="button"/></a>
+
+            <?php
+              if($_GET['nom'] && $_GET['prenom'] && $_GET['mail']){
+                echo'<form action="include/usersModify.php" method="post">';
+                echo"<section>";
+                  echo'<input name="nom" class="form-control" type="text" value="'.$_GET['nom'].'"/></br>';
+                  echo'<input name="prenom" class="form-control" type="text" value="'.$_GET['prenom'].'"/></br>';
+                  echo'<input name="email" class="form-control" type="email" value="'.$_GET['mail'].'"/></br></br>';
+                  echo'<input name="id" type="hidden" value="'.$_GET['id'].'"/>';
+                echo'<section>';
+                echo'<footer class="cf">';
+                echo'<input value="Modifier" name="classe" class="form-control" type="submit"/>';
+                echo'<a href="#fermer" class="btn droite" title="Fermer la fenêtre"><input value="Fermer" class="form-control" type="button"/></a>';
+              }
+              else{
+                echo "<section>";
+                  echo'<input name="nom" class="form-control" type="text" placeholder="Nom"/></br>';
+                  echo'<input name="prenom" class="form-control" type="text" placeholder="Prénom"/></br>';
+                  echo'<input name="email" class="form-control" type="email" placeholder="E-mail"/></br></br>';
+                  echo'<label class="form-control">Administrateur<input type="radio" name="role" value="administrateur"></label>';
+                  echo'<label class="form-control">Professeur<input type="radio" name="role" value="professeur"></label>';
+                  echo'<label class="form-control">Eleve<input type="radio" name="role" value="eleve" ></label>';
+                echo'<section>';
+                echo'<footer class="cf">';
+                echo'<input value="Ajouter" name="classe" class="form-control" type="submit"/>';
+                echo'<a href="#fermer" class="btn droite" title="Fermer la fenêtre"><input value="Fermer" class="form-control" type="button"/></a>';
+              }
+            ?>
            </footer>
          </form>
       </div>
