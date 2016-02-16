@@ -23,7 +23,7 @@ function verifMail(champ)
 
 function verifMdp(champ)
 {
-   if(champ.value.length >= 8)
+   if(champ.value.length < 8)
    {
       surligne(champ, true);
       return false;

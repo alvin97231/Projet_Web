@@ -38,7 +38,7 @@ td, th {
 		line-height: 1;
 	}
 th {
-    background-color: #f98740;
+    background-color: #3f47cc;
     font-weight: bold;
     color: #fff;
     white-space: nowrap;
@@ -54,6 +54,11 @@ tbody tr:hover {
     background-color: rgba(249,135,64,0.3);
 }
 
+tbody {
+	height: 5em;                   /* définit une hauteur */
+	overflow-x: hidden;             /* esthétique */
+	overflow-y: auto;               /* permet de scroller les cellules */
+}
 /* For appearance */
 .sticky-wrap {
 	overflow-x: auto;

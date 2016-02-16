@@ -1,7 +1,6 @@
 <?php
-  $_SESSION["login"] = NULL;
-  $_SESSION["mdp"] = NULL;
-  $_SESSION["type"] = NULL;
+  session_start();
+  $_SESSION = array(); 
   session_destroy();
   header("location: ../index.php");
 ?>

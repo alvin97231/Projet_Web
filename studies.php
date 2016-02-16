@@ -18,7 +18,7 @@
     ?>
 
     </div>
-  </div><!-- End of Header-->
+  </div>
 
 <div id="wrap">
 
@@ -26,29 +26,28 @@
   <div class="main_content">
 
     <div class="section_two_three entry">
-
-     <table>
-       <thead>
-         <tr>
-           <th>Discipline</th>
-           <th>Niveau</th>
-         </tr>
-       </thead>
-       <tbody>
          <?php
+         if($_SESSION['type']==3) {
+           studiesAdminList($bdd);
+         }
+         else if($_SESSION['type']==2) {
+           studiesTeacherList($bdd);
+         }
          ?>
-       </tbody>
-     </table>
-
     </div>
 
     <div class="section_one_three sidebar">
 
-        <h2 class="centered_title">Mes enseignements</h2>
+        <h2 class="centered_title">Enseignements</h2>
         <div class="roundimg"><a href="#" title=""><img src="images/icon_clients.png" alt="" title="" /></a></div>
         <p class="centered_text">
         </p>
-        <a href="#oModal" class="more">Ajouter</a>
+        <?php
+        if($_SESSION['type']==2) {
+          echo '<a href="#oModal" class="more">Modifier</a>';
+        }
+        ?>
+
 
     </div>
 
