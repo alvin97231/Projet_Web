@@ -44,6 +44,7 @@
         </p>
         <?php
         if($_SESSION['type']==2) {
+
           echo '<a href="#oModal" class="more">Modifier</a>';
         }
         ?>

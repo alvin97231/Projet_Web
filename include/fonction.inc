@@ -345,6 +345,7 @@ function suppliesStudentList($bdd)
 	$row = $result -> fetch_all();
 	$display.='<table><thead><tr><th>Quantite</th><th>Libelle</th></tr></thead><tbody>';
 
+
 	foreach ($row as $value) {
 		foreach ($value as $key) {
 
@@ -388,13 +389,13 @@ function suppliesStudentList($bdd)
 								$display.= "<td>$libelle</td>";
 						}
 			}
+			$display.= "</tr>\n";
+			$display.= "</tbody></table>";
+			echo $display;
+			$stmt->close();
+			$result -> free();
 		}
 	}
-	$display.= "</tr>\n";
-	$display.= "</tbody></table>";
-	echo $display;
-	$stmt->close();
-	$result -> free();
 }
 
 /**
@@ -490,7 +491,9 @@ function usersList($bdd)
 				echo "<td>>$nom</td>";
 				echo "<td>$prenom</td>";
 				echo "<td>$login</td>";
-				echo "<td><a href=\"main_panel.php#oModal&nom=$nom\">modifier</td>";
+				echo "<td><a href=\"main_panel.php&nom=$nom#oModal\">modifier</td>";
+				echo '<td></td>';
+				echo '<td></td>';
 				echo "</tr>\n";
 		}
 
